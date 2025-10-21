@@ -20,8 +20,8 @@ module memory#(
     logic [63:0] write_mem [0:7];
 
     //create row and column
-    logic [2:0] row = pixel[5:3];
-    logic [2:0] column = pixel[2:0];
+    logic [2:0] row;
+    logic [2:0] column;
 
     //start and end index of row vector
     logic [7:0] start_index;
@@ -29,10 +29,12 @@ module memory#(
 
     assign start_index = 8*column;
     assign end_index = start_index+7;
+    assign row = pixel[5:3];
+    assign column = pixel[2:0];
 
     initial begin
         $readmemh(INIT_FILE, read_mem);
-        write_mem <= read_mem;
+        write_mem = read_mem;
     end
 
     always_ff @(posedge clk) begin 
@@ -46,9 +48,16 @@ module memory#(
             WRITE:
                 write_mem[row][end_index -: 8] <= new_pixel_value;
             REPLACE:
-                read_mem <= write_mem;
+                read_mem[0] <= write_mem[0];
+                read_mem[1] <= write_mem[1];
+                read_mem[2] <= write_mem[2];
+                read_mem[3] <= write_mem[3];
+                read_mem[4] <= write_mem[4];
+                read_mem[5] <= write_mem[5];
+                read_mem[6] <= write_mem[6];
+                read_mem[7] <= write_mem[7];
             default:
-                write_mem <= read_mem;
+                // do nothing
         endcase
     end
 
