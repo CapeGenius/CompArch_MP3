@@ -15,7 +15,7 @@ module controller (
     localparam [2:0] TRANSMIT_PIXEL = 3'b100; // state to transmit pixel
 
     localparam [8:0] TRANSMIT_CYCLES    = 9'd360;       // = 24 bits / pixel x 15 cycles / bit
-    localparam [19:0] IDLE_CYCLES       = 20'd351832;   // = 375000 - 64 x (360 + 2) for 32 frames / second
+    localparam [19:0] IDLE_CYCLES       = 20'd3051832;   // = 375000 - 64 x (360 + 2) for 32 frames / second
 
     logic state = TRANSMIT_FRAME;
     logic next_state;
@@ -24,7 +24,7 @@ module controller (
     logic [2:0] next_transmit_phase;
 
     logic [5:0] pixel_counter = 6'd0; // 2^6 = 64 pixels per frame
-    logic [4:0] frame_counter = 5'd0; // 2^5 = 32 frames per second
+    logic [2:0] frame_counter = 4'b0; // 2^5 = 32 frames per second
     logic [8:0] transmit_counter = 9'd0; // 2^9 --> number of cycles to transmit a frame --> until (360 + 2) x 64 max cycles 
     logic [19:0] idle_counter = 20'd0; // number of cycles between frames
 
