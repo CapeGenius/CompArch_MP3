@@ -34,7 +34,7 @@ module memory#(
 
     initial begin
         $readmemh(INIT_FILE, read_mem);
-        write_mem = read_mem;
+        $readmemh(INIT_FILE, write_mem);
     end
 
     always_ff @(posedge clk) begin 
@@ -42,22 +42,22 @@ module memory#(
         current_line <= read_mem[row];
         previous_line <= (row == 0) ? read_mem[7] : read_mem[row-1];
         next_line <= (row == 7) ? read_mem[0] : read_mem[row+1];
-        read_data <= read_mem[row][end_index -: 8];
+        read_data <= read_mem[row][start_index +: 8];
 
-        case (write_flag)
-            WRITE:
-                write_mem[row][end_index -: 8] <= new_pixel_value;
-            REPLACE:
-                read_mem[0] <= write_mem[0];
-                read_mem[1] <= write_mem[1];
-                read_mem[2] <= write_mem[2];
-                read_mem[3] <= write_mem[3];
-                read_mem[4] <= write_mem[4];
-                read_mem[5] <= write_mem[5];
-                read_mem[6] <= write_mem[6];
-                read_mem[7] <= write_mem[7];
-            default:
-                // do nothing
+        case (write_flag) 
+            WRITE: 
+                write_mem[row][start_index +: 8] <= new_pixel_value;
+            REPLACE: 
+                begin
+                    read_mem[0] <= write_mem[0];
+                    read_mem[1] <= write_mem[1];
+                    read_mem[2] <= write_mem[2];
+                    read_mem[3] <= write_mem[3];
+                    read_mem[4] <= write_mem[4];
+                    read_mem[5] <= write_mem[5];
+                    read_mem[6] <= write_mem[6];
+                    read_mem[7] <= write_mem[7];
+                end
         endcase
     end
 
