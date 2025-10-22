@@ -19,6 +19,10 @@ module game_of_life#(
     logic [63:0] current_line;
     logic [63:0] next_line;
 
+    localparam [5:0] MAX_PIXELS = 63;
+
+    logic [7:0] neighbors = 8'b0;
+
     // declare local params for reading and writing into memory
     localparam [1:0] WRITE = 2'b01;
     localparam [1:0] REPLACE = 2'b10;
@@ -34,20 +38,20 @@ module game_of_life#(
     // get column and row
     logic [2:0] row = address[5:3];
     logic [2:0] column = address[2:0];
-    logic [7:0] start_index, end_index, previous_start, previous_end, next_start, next_end;
+    logic [7:0] start_index, previous_start,next_start;
 
+    // represents the index of the pixel address 
     assign start_index = 8*column;
     assign end_index = start_index+7;
-    assign previous_start = (start_index == 0) ? (63 - 7) : start_index - 8;
-    assign previous_end = start_index + 7;
-    assign next_start = (start_index == 56) ? (0) : start_index + 8;
-    assign next_end = next_start+7;
+
+    // represents the index of
+    assign previous_start = (start_index == 0) ? 56 : start_index - 8;
+    //assign previous_end = previous_start + 7;
+    assign next_start = (start_index == 56) ? 0 : start_index + 8;
+    //assign next_end = next_start+7;
 
     initial begin
         color_value = 8'b0;
-        previous_line = 64'b0;
-        current_line = 64'b0;
-        next_line = 64'b0;
         write_flag = WRITE;
     end
 
@@ -66,7 +70,7 @@ module game_of_life#(
 
     always_comb begin
         counter = 3'b000;
-        logic [7:0] neighbors;
+        neighbors = 8'b0;
 
         // declare all neighbors
         neighbors[0] = (previous_line[previous_start +:8] != 0);
@@ -79,33 +83,31 @@ module game_of_life#(
         neighbors[7] = (next_line[next_start +: 8] != 0);
 
         // count all the neighbors
-        counter = $countones(neighbors)
-    end
-
-    always_comb begin
-        case (write_flag):
-            (REPLACE): write_flag <= WRITE;
-        endcase
+        counter = $countones(neighbors);
     end
 
     always_ff @(posedge clk) begin
 
-        if (counter < 2 & read_data != DEAD) begin
+        if (write_flag == REPLACE) begin
+            write_flag <= WRITE;
+        end
+
+        if (counter < 2 && read_data != DEAD) begin
             color_value <= DEAD;
-        end else if (counter <= 3 & read_data != DEAD) begin
+        end else if ((counter == 2 || counter == 3) && read_data != DEAD) begin
             color_value <= ALIVE; 
-        end else if (counter > 3 & read_data != DEAD) begin
+        end else if (counter > 3 && read_data != DEAD) begin
             color_value <= DEAD; 
-        end else if (counter == 3 & read_data == DEAD) begin
+        end else if (counter == 3 && read_data == DEAD) begin
             color_value <= ALIVE; 
         end else begin
             color_value <= DEAD;
         end
 
-        case (address):
-            (63): write_flag <= REPLACE;
-            default: //do nothing
-        endcase
+        if (address == MAX_PIXELS) begin
+            write_flag <= REPLACE;
+        end
+
     end
 
 
