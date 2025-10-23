@@ -8,6 +8,8 @@ module game_of_life#(
     input logic [5:0] address,
     output logic [7:0] read_data
 );
+
+
     // declare logic for memory module input
     logic [7:0] color_value;
     logic [1:0] write_flag;
@@ -36,13 +38,16 @@ module game_of_life#(
     localparam IDLE = 1'b1;
 
     // get column and row
-    logic [2:0] row = address[5:3];
-    logic [2:0] column = address[2:0];
+    logic [2:0] row; 
+    logic [2:0] column;
+     
+    assign row = address[5:3];
+    assign column= address[2:0];
     logic [7:0] start_index, previous_start,next_start;
 
     // represents the index of the pixel address 
     assign start_index = 8*column;
-    assign end_index = start_index+7;
+    //assign end_index = start_index+7;
 
     // represents the index of
     assign previous_start = (start_index == 0) ? 56 : start_index - 8;
