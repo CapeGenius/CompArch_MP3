@@ -8,7 +8,8 @@ module game_of_life#(
     input logic [5:0] address,
     output logic [7:0] read_data
 );
-
+    // declare an idle counter
+    logic [4:0] transmit_idle_register;
 
     // declare logic for memory module input
     logic [7:0] color_value;
@@ -58,6 +59,7 @@ module game_of_life#(
     initial begin
         color_value = 8'b0;
         write_flag = WRITE;
+        transmit_idle_register = 5'b000;
     end
 
     memory #(
@@ -93,6 +95,7 @@ module game_of_life#(
 
     always_ff @(posedge clk) begin
 
+        transmit_idle_register = {transmit_idle_register, state};
         if (write_flag == REPLACE) begin
             write_flag <= WRITE;
         end
@@ -109,7 +112,7 @@ module game_of_life#(
             color_value <= DEAD;
         end
 
-        if (address == MAX_PIXELS) begin
+        if (transmit_idle_register == 5'b11000) begin
             write_flag <= REPLACE;
         end
 
