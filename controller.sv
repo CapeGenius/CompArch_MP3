@@ -24,7 +24,7 @@ module controller (
     logic [2:0] next_transmit_phase;
 
     logic [5:0] pixel_counter = 6'd0; // 2^6 = 64 pixels per frame
-    logic [2:0] frame_counter = 4'b0; // 2^5 = 32 frames per second
+    logic [4:0] frame_counter = 4'b0; // 2^5 = 32 frames per second
     logic [8:0] transmit_counter = 9'd0; // 2^9 --> number of cycles to transmit a frame --> until (360 + 2) x 64 max cycles 
     logic [19:0] idle_counter = 20'd0; // number of cycles between frames
 
