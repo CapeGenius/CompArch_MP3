@@ -33,7 +33,7 @@ module top(
     ) u1 (
         .clk            (clk),
         .state          (transmit_pixel),
-        .address        (address), 
+        .address        (pixel), 
         .read_data      (green_data)
     );
 
@@ -43,7 +43,7 @@ module top(
     ) u2 (
         .clk            (clk),
         .state          (transmit_pixel),
-        .address        (address), 
+        .address        (pixel), 
         .read_data      (blue_data)
     );
 
@@ -53,7 +53,7 @@ module top(
     ) u3 (
         .clk            (clk),
         .state          (transmit_pixel),
-        .address        (address), 
+        .address        (pixel), 
         .read_data      (red_data)
     );
 
