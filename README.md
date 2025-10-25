@@ -1,0 +1,1 @@
+![Animated Gif](visualized_glider.gif)
