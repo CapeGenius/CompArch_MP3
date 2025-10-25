@@ -37,6 +37,17 @@ module memory#(
         $readmemh(INIT_FILE, write_mem);
     end
 
+    // open a file for writing memory content
+    // integer file;
+    // initial begin
+
+    //     file = $fopen("write_mem.txt", "w");
+    //     if (file == 0) begin
+    //         $display("ERROR: Could not open write_mem.txt for writing");
+    //         $finish;
+    //     end
+    // end
+
     always_ff @(posedge clk) begin 
 
         current_line <= read_mem[row];
@@ -57,8 +68,27 @@ module memory#(
                     read_mem[5] <= write_mem[5];
                     read_mem[6] <= write_mem[6];
                     read_mem[7] <= write_mem[7];
+                    
+                    // $fdisplay(file, "---- REPLACE triggered at time %0t ----", $time);
+                    // $fdisplay(file, "Row 0 : %h", write_mem[0]);
+                    // $fdisplay(file, "Row 1 : %h", write_mem[1]);
+                    // $fdisplay(file, "Row 2 : %h", write_mem[2]);
+                    // $fdisplay(file, "Row 3 : %h", write_mem[3]);
+                    // $fdisplay(file, "Row 4 : %h", write_mem[4]);
+                    // $fdisplay(file, "Row 5 : %h", write_mem[5]);
+                    // $fdisplay(file, "Row 6 : %h", write_mem[6]);
+                    // $fdisplay(file, "Row 7 : %h", write_mem[7]);
+
+                    // $fdisplay(file, "\n");
+                    // $fflush(file); // optional but ensures contents are written immediately
                 end
         endcase
     end
+
+
+    // final begin
+    //     $fclose(file);
+    //     $display("write_mem.txt written and closed successfully.");
+    // end
 
 endmodule
