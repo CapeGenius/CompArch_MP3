@@ -18,7 +18,7 @@ module game_of_life_tb;
     );
 
     initial begin
-        $dumpfile("game_of_life_tb.vcd");
+        $dumpfile("test_bench/game_of_life_tb.vcd");
         $dumpvars(0, game_of_life_tb);
         #90000000
         $finish;
