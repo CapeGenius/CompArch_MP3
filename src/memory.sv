@@ -41,7 +41,7 @@ module memory#(
     // integer file;
     // initial begin
 
-    //     file = $fopen("write_mem.txt", "w");
+    //     file = $fopen("test_bench/write_mem.txt", "w");
     //     if (file == 0) begin
     //         $display("ERROR: Could not open write_mem.txt for writing");
     //         $finish;
